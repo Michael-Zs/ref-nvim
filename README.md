@@ -6,12 +6,12 @@ A tiny Neovim plugin that generates file/selection references like `@hello.c:20-
 
 **lazy.nvim:**
 ```lua
-{ dir = "~/Prj/ref-nvim" }
+{ "Michael-Zs/ref-nvim" }
 ```
 
 **vim-plug:**
 ```vim
-Plug '~/Prj/ref-nvim'
+Plug 'Michael-Zs/ref-nvim'
 ```
 
 ## Usage
@@ -29,7 +29,12 @@ Add these to your config for quick access:
 -- Normal mode: yank ref for current line
 vim.keymap.set("n", "<leader>cr", "<cmd>Ref<cr>", { desc = "Copy file ref" })
 -- Visual mode: yank ref for selection
-vim.keymap.set("v", "<leader>cr", "<cmd>Ref<cr>", { desc = "Copy file ref (visual)" })
+vim.keymap.set("v", "<leader>cr", function()
+  local start = vim.fn.line("v")
+  local end_ = vim.fn.line(".")
+  if start > end_ then start, end_ = end_, start end
+  require("ref").yank_ref(start, end_)
+end, { desc = "Copy file ref (visual)" })
 ```
 
 ## Configuration
